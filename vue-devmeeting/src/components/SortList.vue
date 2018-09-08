@@ -1,18 +1,21 @@
 
 <template>
-  <div>{{product.name}}</div>
+  <button v-on:click="sortProducts()">Sort</button>
 </template>
-
 <script>
 export default {
-  name: "ProductListItem",
+  name: "SortList",
   // The case is, we have to define props (inputs)
   props: {
     // Here we also added some basic props validation
-    product: {
-      type: Object
+    
+    
+  },
+  methods: {
+      sortProducts() {
+          this.$emit('sort-list');
+        }
     }
-  }
 };
 </script>
 

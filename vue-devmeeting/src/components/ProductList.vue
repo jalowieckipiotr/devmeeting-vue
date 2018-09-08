@@ -3,7 +3,7 @@
   <div>
     <ul>
       <li v-for="p in products" :key="p.id">
-          <product-list-item :product="p"></product-list-item>
+          <ProductListItem :product="p"></ProductListItem>
       </li>
     </ul>
     <p v-if="!products.length">No products!</p>
