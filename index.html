@@ -25,7 +25,7 @@
     <h2>My awesome list</h2>
     <ul>
       <!-- 2. Then, we're using built-in v-for directive to iterate over products -->
-      <li v-for="p in products">{{ p.name }}</li>
+      <li v-for="p in products">{{ p.name }}<button v-on:click="removeProduct(p.id)">X</button></li>
     </ul>
     <!-- 5. v-if can be helpful with conditional statements -->
     <p v-if="!products.length">No products!</p>
@@ -44,10 +44,10 @@
         product:'',
         //7/ 1. We can define any JavaScript some array of objects
         products: [{
-          id: 0,
+          id: 1,
           name: 'Coffee'
         }, {
-          id: 1,
+          id: 2,
           name: 'Pizza'
         }]
       },
@@ -58,15 +58,28 @@
           this.products.pop();
         },
         addNew(product) {
+
+          var id=this.products.length+1;
+          if (id ==0) id=1;
           this.products.push(
               {
-                  id:3,
+                  id: this.products.length+1,
                   name:product
               }
               
           );
-          product='';
-        }
+          this.product='';
+          console.log(this.products)
+        },
+        removeProduct(index) {
+            for (i = 0; i < this.products.length; i++) { 
+                var id = this.products[i].id;
+                if(id ==index) this.products.splice(i, 1); 
+            }
+
+        
+          
+        },
       }
     })
   </script>
