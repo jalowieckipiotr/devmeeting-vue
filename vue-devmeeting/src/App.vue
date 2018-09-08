@@ -10,8 +10,13 @@
     <!-- 1. Vue gives as some nice syntax to cope with casual use cases -->
     <form @submit.prevent="onSubmit()">
       <!-- 2. Any Angular fan here? v-model makes a binding with given object -->
-      <input v-model="newProduct.name">
+      <input name="product" 
+             v-model="newProduct.name" 
+             v-validate="'required|min:3'">
       <button>Add</button>
+      <div v-show="errors.has('product')">
+        {{ errors.first('product') }}
+      </div>
     </form>
   </div>
 </template>
@@ -37,13 +42,20 @@ export default {
     }
   },
   methods: {
-    //7/ 4. By keeping reference to data we can let Vue to do its job
     onSubmit() {
-      this.products.push({
-        id: uuid(),
-        ...this.newProduct
+      // 3. On the JS side we need to use yet another injected value called $validator to validate all the fields
+      this.$validator.validateAll().then(result => {
+        if (!result) {
+          return;
+        }
+        this.products.push({
+          id: uuid(),
+          ...this.newProduct
+        });
+        this.newProduct.name = '';
+        // 4/ and reset validation state after adding a product
+        this.$validator.reset();
       });
-      this.newProduct.name = '';
     }
   }
 }

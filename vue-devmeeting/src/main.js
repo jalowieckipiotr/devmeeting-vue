@@ -1,6 +1,9 @@
 import Vue from 'vue'
 // The whole App component is now imported
 import App from './App.vue'
+import VeeValidate from 'vee-validate';
+
+Vue.use(VeeValidate);
 
 Vue.config.productionTip = false
 
