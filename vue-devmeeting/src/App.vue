@@ -1,31 +1,26 @@
-<!--10- 1. There's a <template> part -->
 <template>
   <div id="app">
     <h2>My awesome list</h2>
-    <ul>
-      <li v-for="p in products" :key="p.id">{{ p.name }}</li>
-    </ul>
-    <p v-if="!products.length">No products!</p>
-
-    <!-- 1. Vue gives as some nice syntax to cope with casual use cases -->
-    <form @submit.prevent="onSubmit()">
-      <!-- 2. Any Angular fan here? v-model makes a binding with given object -->
-      <input name="product" 
-             v-model="newProduct.name" 
-             v-validate="'required|min:3'">
-      <button>Add</button>
-      <div v-show="errors.has('product')">
-        {{ errors.first('product') }}
-      </div>
-    </form>
+    <!-- 3. Then we can use component by kebab-cased name and providing :input -->
+    <product-list :products="products"></product-list>
+    <add-product @add-product="onAddProduct"></add-product>
+   
   </div>
 </template>
 
 <script>
-import uuid from 'uuid/v4';
+
+// 1. To use our new, shiny component we need to import it first
+import ProductList from './components/ProductList'
+import AddProduct from './components/AddProduct';
 
 export default {
   name: 'app',
+  //3/ 2. And add it to as a key called 'components'
+  components: {
+    ProductList,
+    AddProduct,
+  },
   data() {
     return {
       products: [{
@@ -35,27 +30,15 @@ export default {
         id: 1,
         name: 'Pizza'
       }],
-      //3/ 3. Here goes the definition
       newProduct: {
         name: ''
       }
     }
   },
-  methods: {
-    onSubmit() {
-      // 3. On the JS side we need to use yet another injected value called $validator to validate all the fields
-      this.$validator.validateAll().then(result => {
-        if (!result) {
-          return;
-        }
-        this.products.push({
-          id: uuid(),
-          ...this.newProduct
-        });
-        this.newProduct.name = '';
-        // 4/ and reset validation state after adding a product
-        this.$validator.reset();
-      });
+   methods: {
+    //3/ All we have to do in a method is to add product to the list
+    onAddProduct(product) {
+      this.products.push(product);
     }
   }
 }
